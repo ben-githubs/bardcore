@@ -1,4 +1,5 @@
-""" Code for loading config files. """
+"""Code for loading config files."""
+
 import logging
 from pathlib import Path
 
@@ -10,11 +11,12 @@ from .tracks import Playable, Track, CompTrack, TrackList
 
 yaml = YAML(typ="safe")
 
+
 def load_config(path) -> Player:
     logging.debug(f"Loading config from file '{path}'")
     with path.open("r") as f:
         config = yaml.load(f)
-    
+
     # Load named sound files
     #   We allow users to give names to sound files to make referencing them easier elsewhere in
     #   the config file.
@@ -37,7 +39,7 @@ def load_config(path) -> Player:
                 track_path = named_sounds[track_path]
             tracks.append(Track(track_name, track_path))
         return tracks
-    
+
     for name, defn in config.get("comp tracks", {}).items():
         if name in playables:
             raise ConfigError(f"Multiple playables in config with name '{name}'")
@@ -47,7 +49,7 @@ def load_config(path) -> Player:
         if name in playables:
             raise ConfigError(f"Multiple playables in config with name '{name}'")
         playables[name] = TrackList(name, load_config_tracks(defn))
-    
+
     logging.debug(f"Loaded {len(playables)} playable items")
 
     # Load other config items
@@ -66,5 +68,5 @@ def load_config(path) -> Player:
         logging.debug(f"Registering playable from config: {item.name}")
         player.register_playable(item)
 
-    logging.info("Finished loading config.")    
+    logging.info("Finished loading config.")
     return player

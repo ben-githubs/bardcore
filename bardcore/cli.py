@@ -13,6 +13,7 @@ from ._logging import configure_logging
 player: Player = None
 session = PromptSession()
 
+
 def help():
     helptxt = (
         "Bardore is a background-music management app intended for use in D&D sessions.",
@@ -24,9 +25,10 @@ def help():
         "/stop, /s:    Stop playing the current item.",
         "/play, /p [playable] [track?]:    Starts playing the specified track list or composite",
         "                                  track. Optionally provide a substract to start.",
-        "/track, /t [track]:               Switch the currently playing track to a different one."
+        "/track, /t [track]:               Switch the currently playing track to a different one.",
     )
     print("/n".join(helptxt))
+
 
 def switch_track(track_name: str = None):
     if track_name:
@@ -35,8 +37,10 @@ def switch_track(track_name: str = None):
         print("The following tracks are available to switch to:")
         list_tracks(player)
 
+
 def play(track_name: str, mode_name: str = None):
     player.play(track_name, mode_name)
+
 
 def list_tracks(player: Player):
     for track in player.current_playable.tracks.values():
@@ -47,7 +51,7 @@ def list_tracks(player: Player):
 
 
 def build_completer():
-    """ Builds a map for auto completions when prompting the user for input. """
+    """Builds a map for auto completions when prompting the user for input."""
     logging.debug("Building auto-completion")
     completer_dict = {
         "/help": None,
@@ -56,14 +60,16 @@ def build_completer():
         "/quit": None,
         "/list": None,
         "/vol": None,
-        "/play": {}
+        "/play": {},
     }
     for playable in player.playables.values():
-        completer_dict["/play"][playable.name] = { "- " + track: None for track in playable.tracks.keys() }
+        completer_dict["/play"][playable.name] = {
+            "- " + track: None for track in playable.tracks.keys()
+        }
 
     if player.current_playable and isinstance(player.current_playable, Playable):
-        completer_dict["/track"] = { track for track in player.list_tracks() }
-    
+        completer_dict["/track"] = {track for track in player.list_tracks()}
+
     completer_dict["/h"] = completer_dict["/help"]
     completer_dict["/t"] = completer_dict["/track"]
     completer_dict["/s"] = completer_dict["/stop"]
@@ -83,14 +89,14 @@ def volume(vol: str) -> None:
         vol_str = round(player.master_volume * 100)
         print(f"Volume is currently set at {vol_str}%")
         return
-    
+
     # Else, set the volume to the new value
     vol = int(vol)
     if vol < 0 or vol > 100:
         logging.error("Volume must be between 0 and 100!")
         return
-    
-    player.set_volume(vol/100)
+
+    player.set_volume(vol / 100)
     print(f"Volume is now set at {vol}%")
 
 
@@ -98,7 +104,7 @@ def main():
     if len(sys.argv) != 2:
         print("Bardcore only accepts 1 argument: the path to the config file.")
         exit(1)
-    
+
     fname = Path(sys.argv[1])
     configure_logging(fname)
     logging.info("Starting program.")
@@ -115,7 +121,9 @@ def main():
         if player.current_playable:
             modestr = f"/{player.current_playable.current_track.name})"
             prompt_text += f" ({player.current_playable.name}{modestr})"
-        user_input: str  = session.prompt(prompt_text + " > ", completer=completer, complete_while_typing=True)
+        user_input: str = session.prompt(
+            prompt_text + " > ", completer=completer, complete_while_typing=True
+        )
         if not user_input:
             continue
         idx = user_input.find(" ")
