@@ -5,7 +5,7 @@ sounds:
   forest1: music/forest_ambient_track.ogg
   forest2: music/another_forest_ambient_track.ogg
   forest battle: music/forest_battle_music.ogg
-  forest boss: musuc/cool_boss_music.ogg
+  forest boss: music/cool_boss_music.ogg
 
 # Some tracks
 comp tracks:
