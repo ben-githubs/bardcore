@@ -37,6 +37,8 @@ def load_config(path) -> Player:
         for track_name, track_path in track_defns.items():
             if track_path in named_sounds:
                 track_path = named_sounds[track_path]
+            if not track_path.is_absolute():
+                track_path = path.parent / track_path
             tracks.append(Track(track_name, track_path))
         return tracks
 

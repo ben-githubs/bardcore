@@ -24,7 +24,7 @@ def get_sound(path: Path) -> mixer.Sound:
     if sound := _sound_objects.get(path):
         return sound
     # Else, load it
-    sound = mixer.Sound(path)
+    sound = mixer.Sound(file=path)
     _sound_objects[path] = sound
     return sound
 
