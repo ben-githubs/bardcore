@@ -1,0 +1,22 @@
+master volume: 80 # My ears are weak, baby ears
+
+# Assign aliases to each sound file, so we don't have to write them out in full all the time
+sounds:
+  forest1: music/forest_ambient_track.ogg
+  forest2: music/another_forest_ambient_track.ogg
+  forest battle: music/forest_battle_music.ogg
+  forest boss: musuc/cool_boss_music.ogg
+
+# Some tracks
+comp tracks:
+  battle:
+    main: forest battle
+  boss:
+    main: forest boss
+
+# playlists
+tracklists:
+  forest ambient:
+    tracks:
+      f1: forest1
+      f2: forest2
