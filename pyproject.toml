@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "bardcore"
+version = "0.1.0"
+description = "A command line tool for DJing background music during D&D sessions."
+authors = ["Ben Airey <benjaminjohnairey@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+prompt-toolkit = "^3.0.48"
+pygame = "^2.6.1"
+"ruamel.yaml" = "^0.18.6"
+
+[tool.poetry.scripts]
+bardcore = 'bardcore.cli:main'
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.0"
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+line-length = 88
+indent-width =4
+
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
