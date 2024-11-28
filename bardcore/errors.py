@@ -8,3 +8,7 @@ class NoTrackPlayingError(PlayerError):
 
 class ConfigError(PlayerError):
     pass
+
+
+class NoSuchTrackError(PlayerError):
+    pass

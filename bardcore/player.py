@@ -1,7 +1,7 @@
 import logging
 
 from .tracks import Playable
-from .errors import NoTrackPlayingError
+from .errors import NoSuchTrackError, NoTrackPlayingError
 from . import util
 
 
@@ -70,7 +70,9 @@ class Player:
             track_name (str): Name of the track to play. If unspecified, uses a default track.
             fade_dur (float): Duration of fade-in effect for switching Playables.
         """
-        target_playable = self.playables[playable_name]
+        target_playable = self.playables.get(playable_name)
+        if not target_playable:
+            raise NoSuchTrackError(playable_name)
         # If nothing is currently playing
         if not self.current_playable:
             target_playable.play(track_name, vol=self.master_volume)

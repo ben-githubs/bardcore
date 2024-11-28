@@ -1,9 +1,12 @@
 from pathlib import Path
 import sys
 import logging
+from difflib import get_close_matches
 
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import NestedCompleter, FuzzyCompleter
+
+from bardcore.errors import NoSuchTrackError
 
 from . import config
 from .player import Player
@@ -39,7 +42,14 @@ def switch_track(track_name: str = None):
 
 
 def play(track_name: str, mode_name: str = None):
-    player.play(track_name, mode_name)
+    try:
+        player.play(track_name, mode_name)
+    except NoSuchTrackError:
+        close_match = get_close_matches(track_name, player.list_playables(), n=1)
+        err_str = f"No track found with name '{track_name}'"
+        if close_match:
+            err_str += f"; did you mean '{close_match[0]}'?"
+        logging.error(err_str)
 
 
 def list_tracks(player: Player):
@@ -148,7 +158,6 @@ def main():
                     player.stop(0)
                     break
         except BaseException as e:
-            # logging.error(f"{e.__class__.__name__}: {e}")
-            raise e
+            logging.error(f"Unhandled {e.__class__.__name__}: {e}")
         print()
     logging.info("Exiting program.")
